@@ -5,6 +5,9 @@
 // Niels Moseley - Moseley Instruments 2017
 // http://www.moseleyinstruments.com
 //
+//
+// For a 10 kHz output rate, the clock rate should be 2.560 MHz
+// 
 
 module PWMDAC (
         clk, 
