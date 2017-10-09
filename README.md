@@ -1,11 +1,12 @@
 ![Speech256](assets/logo_small.png)
-# Speech256
 
-An FPGA implementation of a classic 80ies speech synthesizer.
+An FPGA implementation of a classic 80ies speech synthesizer in Verilog.
 
 ## Introduction
 
-SpeechSynth0256 was made for/during the [Retro Challenge 2017/10 contest](http://www.retrochallenge.org).
-
 ## License
 TBD.
+
+
+This project was done during the [Retro Challenge 2017/10 contest](http://www.retrochallenge.org).
+![Retrochallenge](assets/retrochallenge_logo.png)
