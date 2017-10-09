@@ -1,4 +1,4 @@
-![Speech256](https://raw.githubusercontent.com/trcwm/speech256/assets/logo.png)
+![Speech256](assets/logo_small.png)
 # Speech256
 
 An FPGA implementation of a classic 80ies speech synthesizer.
