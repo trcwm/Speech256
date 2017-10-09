@@ -4,9 +4,13 @@ An FPGA implementation of a classic 80ies speech synthesizer in Verilog.
 
 ## Introduction
 
+* Platform agnostic implementation.
+
+## FPGA requirements
+* ? K ROM
+
 ## License
 TBD.
-
 
 This project was done during the [Retro Challenge 2017/10 contest](http://www.retrochallenge.org).
 <br>
