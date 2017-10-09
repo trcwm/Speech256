@@ -9,4 +9,5 @@ TBD.
 
 
 This project was done during the [Retro Challenge 2017/10 contest](http://www.retrochallenge.org).
+<p>
 ![Retrochallenge](assets/retrochallenge_logo.png)
