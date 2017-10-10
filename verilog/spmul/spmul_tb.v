@@ -29,7 +29,8 @@ module SPMUL_TB;
         clk    = 0;
         rst_an = 0;
         sig    = 16'h7FFF;
-        coef   = 10'h1FF;
+        //coef   = 10'h1FF;
+        coef   = 10'h3FF; // sign-magnitude
         start  = 0;
         #3
         rst_an = 1;

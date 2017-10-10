@@ -50,12 +50,14 @@ module SPMUL (
         end
         else if (domul == 1)
             begin
-                if (coefreg[9] == 1'b1)
+                // note: leave coefreg[9] untouched
+                // as this is the sign bit...
+                if (coefreg[8] == 1'b1)
                     accumulator <= {accumulator[23:0], 1'b0} + sigreg;
                 else    
                     accumulator <= {accumulator[23:0], 1'b0};
                 
-                coefreg <= {coefreg[8:0], 1'b0};
+                coefreg[8:0] <= {coefreg[7:0], 1'b0};
             end
     end
            
@@ -131,13 +133,16 @@ module SPMUL (
                     end
                 4'b1010:
                     begin
-                        domul <= 1;
-                    end                    
+                        domul <= 0;
+                    end
                 4'b1011:
                     begin
                         domul <= 0;
                         done <= 1;
-                        result_out <= accumulator[23:8];
+                        if (coefreg[9] == 0)
+                            result_out <= {1'b0, accumulator[23:9]};
+                        else
+                            result_out <= {1'b1, ~accumulator[23:9]};
                         state <= 0;
                     end
                 default:
