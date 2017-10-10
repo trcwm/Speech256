@@ -7,7 +7,7 @@
 
 module PWMDAC_TB;
     reg clk, rst_an; 
-    reg signed [0:7] din;
+    reg signed [7:0] din;
     wire dacout, din_ack;
 
     real accu;
