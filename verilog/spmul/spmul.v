@@ -141,10 +141,11 @@ module SPMUL (
                     begin
                         domul <= 0;
                         done <= 1;
+                        // correct for the coeff sign bit
                         if (coefreg[9] == 0)
                             result_out <= {1'b0, accumulator[23:9]};
                         else
-                            result_out <= {1'b1, ~accumulator[23:9]};
+                            result_out <= {1'b1, ~accumulator[23:9]} + 1;
                         state <= 0;
                     end
                 default:

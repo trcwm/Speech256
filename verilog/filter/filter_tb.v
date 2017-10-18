@@ -34,30 +34,57 @@ module FILTER_TB;
         rst_an = 0;
 
         sig_in      = 16'h0100;
-        coef_in     = 10'h000; // sign-magnitude
+        coef_in     = 0;
         coef_load   = 0;
         start       = 0;
         check_finish  = 0;
 
         #10
         rst_an = 1;
-        #10
-        coef_load = 1;
-        coef_in     = 10'h21F; // sign-magnitude
 
         // load all the coefficients
-        for(i=1; i<12; i=i+1)
-        begin
-            #10
-            coef_load = 1;
-            coef_in     = 10'h00F; // sign-magnitude
-        end
+        #10
+        coef_load = 1;
+        // section 1
+        coef_in     = {1'b0, 9'd128}; // sign-magnitude a1 = -0.25
+        #10
+        coef_in     = {1'b1, 9'd256}; // sign-magnitude a2 = 0.5
+        #10
+        // section 2
+        coef_in     = {1'b0, 9'd0}; // sign-magnitude a1 = 0;
+        #10
+        coef_in     = {1'b0, 9'd0}; // sign-magnitude a1 = 0;
+        #10
+        // section 3
+        coef_in     = {1'b0, 9'd0}; // sign-magnitude a1 = 0;
+        #10
+        coef_in     = {1'b0, 9'd0}; // sign-magnitude a1 = 0;
+        #10
+        // section 4
+        coef_in     = {1'b0, 9'd0}; // sign-magnitude a1 = 0;
+        #10
+        coef_in     = {1'b0, 9'd0}; // sign-magnitude a1 = 0;
+        #10
+        // section 5
+        coef_in     = {1'b0, 9'd0}; // sign-magnitude a1 = 0;
+        #10
+        coef_in     = {1'b0, 9'd0}; // sign-magnitude a1 = 0;
+        #10
+        // section 6
+        coef_in     = {1'b0, 9'd0}; // sign-magnitude a1 = 0;
+        #10
+        coef_in     = {1'b0, 9'd0}; // sign-magnitude a1 = 0;
         #10
         coef_load = 0;
-        #10
         start = 1;
         #50000;
         check_finish = 1;
+    end
+
+    always@(posedge clk)
+    begin
+        if ((done == 1) && (coef_load != 1))
+            $display("%d", sig_out);
     end
 
     always
