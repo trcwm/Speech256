@@ -67,7 +67,7 @@ module SPMUL (
         begin
             // reset values
             result_out  <= 0;
-            done        <= 0;
+            done        <= 1;   // always be ready to start.. 
             coefreg     <= 0;
             sigreg      <= 0;
             state       <= 0;
@@ -81,19 +81,21 @@ module SPMUL (
             done     <= 0;
             domul    <= 0;
             state    <= state + 4'b0001;
-            casex(state)
-                4'b0000:
+            case(state)
+                4'b0000: // IDLE state
                     begin
                         coefreg  <= coef_in;
                         sigreg   <= sig_in;
                         accu_clr <= 1;
-
                         if (start == 1)
                         begin
                             state <= 4'b0001;
                         end
                         else    
+                        begin
+                            done     <= 1;                        
                             state <= 4'b0000;
+                        end
                     end
                 4'b0001: 
                     begin
