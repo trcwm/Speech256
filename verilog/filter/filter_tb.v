@@ -46,7 +46,7 @@ module FILTER_TB;
         #10
         coef_load = 1;
         // section 1
-        coef_in     = {1'b0, 9'd128}; // sign-magnitude a1 = -0.25
+        coef_in     = {1'b0, 9'd64}; // sign-magnitude a1 = -0.25
         #10
         coef_in     = {1'b1, 9'd256}; // sign-magnitude a2 = 0.5
         #10

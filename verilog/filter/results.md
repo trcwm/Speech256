@@ -31,4 +31,4 @@ The testbench should approximately give the following step response results:
 -    205
 -    205
 
-Note that there might be a few +/- 1 round-off errors.
+Note that may be a few +/- 1 round-off errors.

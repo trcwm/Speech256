@@ -6,11 +6,6 @@
 // http://www.moseleyinstruments.com
 //
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, ..
-// this is all arse-backwards as fuck ..
-// we should use a shift register for states + coefficients!!
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 module FILTER (
         clk, 
@@ -52,6 +47,7 @@ module FILTER (
     reg state_sel;
     reg accu_sel;
     reg do_accu;
+    reg double_mode;
     reg update_states;
     reg update_coeffs;
     reg [3:0] cur_state;
@@ -80,6 +76,7 @@ module FILTER (
     assign mul_coeff = coefmem[11];
     assign sig_out = accu;
 
+    // clocked stuff..
     always @(posedge clk, negedge rst_an)
     begin
         if (rst_an == 0)
@@ -102,6 +99,7 @@ module FILTER (
             accu_sel  <= 0;
             state_sel <= 0;
             do_accu   <= 0;
+            double_mode <= 0;
 
             update_states <= 0;
             update_coeffs <= 0;
@@ -149,7 +147,10 @@ module FILTER (
             // update the accumulator if necessary
             if (do_accu)
             begin
-                accu <= accu_in + mul_result;
+                if (double_mode)
+                    accu <= accu_in +{mul_result[14:0], 1'b0};                    
+                else
+                    accu <= accu_in + mul_result;
             end
 
             // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -162,6 +163,7 @@ module FILTER (
             mul_start <= 0;
             state_sel <= 0;
             accu_sel  <= 0;
+            double_mode <= 0;
             update_states <= 0;
             update_coeffs <= 0;            
             case(cur_state)
@@ -181,11 +183,6 @@ module FILTER (
                          // to reach a valid state
                     begin
                         cur_state <= 4'b0010;
-                        //for(i=0; i<6; i=i+1)
-                        //begin
-                        //    $display("s1[%d] = %x", i, state1[i]);
-                        //    $display("s2[%d] = %x", i, state2[i]);                        
-                        //end
                     end
                 4'b0010: // wait for multiplier to complete
                     begin
@@ -194,6 +191,7 @@ module FILTER (
                             cur_state <= 4'b0011;
                             accu_sel <= 0; // accu = sig_in + mul_result
                             do_accu  <= 1;
+                            double_mode <= 1; // a1 coefficient has double the weight
                         end
                     end
                 4'b0011: // update accu, 1st section only!
@@ -252,6 +250,7 @@ module FILTER (
                             cur_state <= 4'b1011;
                             accu_sel <= 1; // accu = accu + mul_result
                             do_accu  <= 1;
+                            double_mode <= 1; // a1 coefficient has double the weight
                         end
                     end
                 4'b1011: // update accu, 2nd..5th section only!
