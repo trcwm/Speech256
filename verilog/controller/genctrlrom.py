@@ -44,15 +44,16 @@ def emitRomByte(b):
     RomAddress = RomAddress + 1;
 
 def convertFilterCoeff(c):
-    # turn c into negative 8-bit number
-    # 1 -> 255
-    # 2 -> 254
-    # 255 -> 1
-    # 254 -> 2
-    # 128 -> xxx
-    # 0   -> 0
-    
-    return c;
+    # convert 2s complement into
+    # sign-magnitude...
+
+    smag = c & 0x7F;
+    if (c>=0x80):            # convert unsigned to signed
+        c = (c-0x80) ^ 0x7F;
+        smag = c & 0x7F;    # get magnitude
+        smag = smag | 0x80; # add sign bit
+
+    return smag;
 
 fout = open('ctrlrom.v','wt')
 

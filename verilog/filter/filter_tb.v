@@ -13,6 +13,8 @@ module FILTER_TB;
     wire signed [15:0] sig_out;
     wire done;
 
+    defparam u_filter.DEBUG = 1;
+
     FILTER u_filter (
         .clk        (clk),
         .rst_an     (rst_an),
@@ -33,7 +35,7 @@ module FILTER_TB;
         clk    = 0;
         rst_an = 0;
 
-        sig_in      = 16'h0100;
+        sig_in      = 16'h0010;
         coef_in     = 0;
         coef_load   = 0;
         start       = 0;
@@ -46,38 +48,38 @@ module FILTER_TB;
         #10
         coef_load = 1;
         // section 1
-        coef_in     = {1'b0, 9'd64}; // sign-magnitude a1 = -0.25
+        coef_in     = 10'h3C9;
         #10
-        coef_in     = {1'b1, 9'd256}; // sign-magnitude a2 = 0.5
+        coef_in     = 10'h1E4;
         #10
         // section 2
-        coef_in     = {1'b0, 9'd0}; // sign-magnitude a1 = 0;
+        coef_in     = 10'h2B8;
         #10
-        coef_in     = {1'b0, 9'd0}; // sign-magnitude a1 = 0;
+        coef_in     = 10'h1CF;
         #10
         // section 3
-        coef_in     = {1'b0, 9'd0}; // sign-magnitude a1 = 0;
+        coef_in     = 10'h238;
         #10
-        coef_in     = {1'b0, 9'd0}; // sign-magnitude a1 = 0;
+        coef_in     = 10'h080;
         #10
         // section 4
-        coef_in     = {1'b0, 9'd0}; // sign-magnitude a1 = 0;
+        coef_in     = 10'h195;
         #10
-        coef_in     = {1'b0, 9'd0}; // sign-magnitude a1 = 0;
+        coef_in     = 10'h1BF;
         #10
         // section 5
-        coef_in     = {1'b0, 9'd0}; // sign-magnitude a1 = 0;
+        coef_in     = 10'h135;
         #10
-        coef_in     = {1'b0, 9'd0}; // sign-magnitude a1 = 0;
+        coef_in     = 10'h1BF;
         #10
         // section 6
-        coef_in     = {1'b0, 9'd0}; // sign-magnitude a1 = 0;
+        coef_in     = 10'h000;
         #10
-        coef_in     = {1'b0, 9'd0}; // sign-magnitude a1 = 0;
+        coef_in     = 10'h000;
         #10
         coef_load = 0;
         start = 1;
-        #50000;
+        #10000;
         check_finish = 1;
     end
 

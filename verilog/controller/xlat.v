@@ -24,7 +24,7 @@ module XLAT (
     output reg [9:0] c10_out;
     wire sign;
 
-    assign sign = ~c8_in[7];
+    assign sign = c8_in[7];
 
     always@(*)
     begin

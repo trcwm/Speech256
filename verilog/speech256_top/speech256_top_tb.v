@@ -33,7 +33,7 @@ module SPEECH256_TOP_TB;
         #5
         rst_an = 1;
         #5
-        data_in = 6;
+        data_in = 7;
         data_stb = 1;
         #5
         data_stb = 0;

@@ -6,6 +6,12 @@
 // http://www.moseleyinstruments.com
 //
 
+//
+// MEH!, the FSM needs a rewrite
+// 
+// * split into clocked and unclocked ALWAYS
+//   and proper state names.
+//
 
 module FILTER (
         clk, 
@@ -21,6 +27,7 @@ module FILTER (
         start,          // trigger processing of the input signal
         done            // goes to '1' when sig_out has valid data
     );
+    parameter DEBUG = 0; //defult value
 
 	//////////// CLOCK //////////
 	input clk;
@@ -117,13 +124,15 @@ module FILTER (
             // update the filter states if necessary
             if (update_states == 1)
             begin
+                state1[0] <= accu;
+                state2[0] <= state1[5];   
+
                 for(i=1; i<6; i=i+1)
                 begin
                     state1[i] <= state1[i-1];
                     state2[i] <= state2[i-1];
                 end
-                state1[0] <= accu;
-                state2[0] <= state1[5];
+                //$display("BOOM %d %d %d %d %d %d %d", accu, state1[0], state1[1], state1[2],state1[3],state1[4],state1[5]);
             end
 
             // update the coefficients if necessary
@@ -177,6 +186,15 @@ module FILTER (
                             state_sel <= 0; // state 1 as mul input
                             mul_start <= 1; // trigger multiplier
                             cur_state <= 4'b0001;
+
+                            if (DEBUG == 1)
+                            begin
+                                for(i=0; i<6; i=i+1)
+                                begin
+                                    $display("Section %d:   %d   %d", i, state1[i], state2[i]);
+                                end
+                            end
+                            
                         end
                     end
                 4'b0001: // Dummy cycle to wait for mul_done
@@ -227,7 +245,9 @@ module FILTER (
 
                         // check if this is the last section..
                         if (section==4'b0110)
+                        begin
                             cur_state <= 4'b0000;   // one complete filter set done..
+                        end
                         else
                             cur_state <= 4'b1000;   // next..
                     end
