@@ -58,7 +58,7 @@ module PWMDAC (
                 dacout <= 0;
 
             // load new data into DAC when
-            // counter is 255
+            // counter is 127
             if (counter == 8'h7F)
             begin
                 data <= din;

@@ -51,10 +51,8 @@ def convertFilterCoeff(c):
     # 254 -> 2
     # 128 -> xxx
     # 0   -> 0
-    if (c == 0):
-        return 0
     
-    return (256-c);
+    return c;
 
 fout = open('ctrlrom.v','wt')
 

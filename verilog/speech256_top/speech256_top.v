@@ -40,7 +40,7 @@ module SPEECH256_TOP (
     wire [7:0]  dur;
     wire [15:0] amp;
     
-    wire signed  [7:0]  coef_bus;
+    wire signed  [9:0]  coef_bus;
     wire                coef_load;
     
     wire done;
@@ -58,7 +58,7 @@ module SPEECH256_TOP (
     FILTER u_filter (
         .clk        (clk),
         .rst_an     (rst_an),
-        .coef_in    ({coef_bus, 1'b0}),
+        .coef_in    (coef_bus),
         .coef_load  (coef_load),
         .sig_in     (sig_source),
         .sig_out    (sig_filter),

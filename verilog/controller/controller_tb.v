@@ -1,5 +1,5 @@
 // 
-// PWMDAC testbench
+// Controller testbench
 //
 // Niels Moseley - Moseley Instruments 2017
 // http://www.moseleyinstruments.com
@@ -13,7 +13,7 @@ module CONTROLLER_TB;
     reg period_done;
     
     wire ldq;
-    wire signed [7:0] coeff;
+    wire [9:0] coeff;
     wire coeff_load;
     wire [7:0]  period;
     wire [15:0] amp;

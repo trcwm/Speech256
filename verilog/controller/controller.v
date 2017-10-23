@@ -1,5 +1,5 @@
 // 
-// Speecht256 top level
+// Speech256 controller / sequencer
 //
 // Niels Moseley - Moseley Instruments 2017
 // http://www.moseleyinstruments.com
@@ -28,7 +28,7 @@ module CONTROLLER (
 	//////////// OUTPUTS //////////
     output reg ldq;
     output reg coeff_stb;
-    output reg signed [7:0] coeff_out;
+    output reg signed [9:0] coeff_out;
     output reg [15:0] amp_out;
     output reg [7:0]  period_out;
     //output reg [7:0]  dur_out;
@@ -76,8 +76,11 @@ module CONTROLLER (
     reg  [2:0]  coeff_cnt;
     reg  [1:0]  coeff_cnt_update;
 
+    wire  [9:0]  coeff10bit;
+
     wire done;
 
+    // control program ROM
     CTRLROM u_ctrlrom (
         .clk        (clk),
         .data       (rom_data),
@@ -94,7 +97,13 @@ module CONTROLLER (
     parameter COEFF_CNT_ZERO = 2'b00,   // zero coefficient counter
               COEFF_CNT_NOP  = 2'b01,   // do nothing
               COEFF_CNT_INC  = 2'b10;   // increment coefficient counter
-              
+
+    // 8-bit -> 10-bit coefficient expander
+    XLAT u_xlat (
+        .c8_in(rom_data),
+        .c10_out(coeff10bit)
+    );
+
     always @(posedge clk, negedge rst_an)
     begin
         if (rst_an == 0)
@@ -156,7 +165,7 @@ module CONTROLLER (
             if (serve_pitch_data)
             begin
                 duration   <= dur_tmp;
-                amp_out    <= amp_tmp;
+                amp_out    <= {4'b0000, amp_tmp[15:4]};
                 period_out <= period_tmp;
             end
 
@@ -332,7 +341,7 @@ module CONTROLLER (
                 // send F coefficient
                 begin
                     coeff_stb <= 1;
-                    coeff_out <= rom_data;
+                    coeff_out <= coeff10bit;
                     coeff_cnt_update <= COEFF_CNT_INC;
                     rom_addr_sel <= ROM_ADDR_INC;
                     next_state <= S_LOADCOEF2;
@@ -341,7 +350,7 @@ module CONTROLLER (
                 // send B coefficient
                 begin
                     coeff_stb <= 1;
-                    coeff_out <= rom_data;                    
+                    coeff_out <= coeff10bit;                    
                     if (coeff_cnt == 3'd6)
                         next_state <= S_CMDDECODE; // load next section
                     else
