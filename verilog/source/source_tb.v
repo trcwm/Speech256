@@ -13,6 +13,7 @@ module SOURCE_TB;
     reg [7:0] cnt;
 
     wire signed [15:0] source_out;
+    wire period_done;
 
     SOURCE u_source (
         .clk     (clk),
@@ -20,6 +21,7 @@ module SOURCE_TB;
         .period  (period),
         .amplitude (amp),
         .strobe  (strobe),
+        .period_done (period_done)
         .source_out  (source_out)
     );
 

@@ -12,9 +12,9 @@
 module PWMDAC (
         clk, 
         rst_an, 
-        din, 
-        din_ack, 
-        dacout
+        din,        // 16 bit signed data input
+        din_ack,    // is high for 1 clock cycle after reading the din signal
+        dacout      // 1-bit PWM output signal
     );
 
 	//////////// CLOCK //////////

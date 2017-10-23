@@ -148,7 +148,7 @@ module FILTER (
             if (do_accu)
             begin
                 if (double_mode)
-                    accu <= accu_in +{mul_result[14:0], 1'b0};                    
+                    accu <= accu_in + {mul_result[14:0], 1'b0};                    
                 else
                     accu <= accu_in + mul_result;
             end

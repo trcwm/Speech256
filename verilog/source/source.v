@@ -12,6 +12,7 @@ module SOURCE (
         period,         // period in 10kHz samples        
         amplitude,      // unsigned 15-bit desired amplitude of source output
         strobe,         // when strobe == '1' a new source_out will be generated
+        period_done,    // is set to '1' at the end of the period
         source_out      // signed 16-bit source output
     );
 
@@ -23,6 +24,7 @@ module SOURCE (
 
 	//////////// OUTPUTS //////////
 	output reg signed [15:0] source_out;
+    output reg period_done;
 
 	//////////// INPUTS //////////
     input [14:0] amplitude;
@@ -32,6 +34,7 @@ module SOURCE (
     // internal counter and data registers
     reg signed [7:0] periodcnt;
     reg        [16:0] lfsr;
+    reg        last_strobe;
 
     always @(posedge clk, negedge rst_an)
     begin
@@ -39,12 +42,17 @@ module SOURCE (
         begin
             // reset values
             periodcnt <= 0;
+            period_done <= 1;
             source_out <= 0;
+            last_strobe <= 0;
             lfsr <= 17'h1;   //note: never reset the LFSR to zero!
         end
         else
         begin
-            if (strobe == 1)
+            // default value
+            period_done <= 0;
+
+            if ((strobe == 1) && (last_strobe == 0))
             begin
                 // if period == 0, we need to generate noise
                 // else we generate a pulse wave
@@ -53,8 +61,11 @@ module SOURCE (
                     // ------------------------------------------------------------
                     //   LFSR NOISE GENERATOR
                     // ------------------------------------------------------------
-                    if (periodcnt == 64)
-                        periodcnt <= 0;                
+                    if (periodcnt == 64)                        
+                    begin
+                        periodcnt <= 0;
+                        period_done <= 1;
+                    end
                     else
                         periodcnt <= periodcnt + 1;
                     
@@ -69,7 +80,10 @@ module SOURCE (
                     // ------------------------------------------------------------        
                     // make periodcnt count from 0 .. period-1
                     if (periodcnt == period)
-                        periodcnt <= 0;                
+                    begin
+                        periodcnt <= 0;
+                        period_done <= 1;
+                    end
                     else
                         periodcnt <= periodcnt + 1;
 
@@ -79,6 +93,7 @@ module SOURCE (
                         source_out <= 16'h0000;                            
                 end
             end
+            last_strobe <= strobe;
         end
     end
 
