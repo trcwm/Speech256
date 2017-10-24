@@ -20,7 +20,7 @@ The source consists of a LFSR noise generator and a pulse generator with a setta
 ### FILTER
 A 12-pole filter engine that takes 12 10-bit sign-magnitude filter coefficients and a 16-bit input. The 12-pole filter is built from second order sections, each having coefficients A1 and A2. Each filter coefficient is has a range of -1 .. 1.
 
-The second order filter transfer function is H(z) = 1 / (1 - 2*A1*z^-1 - 2*A2*z^-2).
+The second order filter transfer function is H(z) = 1 / (1 - 2 * A1 * z^-1 - 2 * A2 * z^-2).
 
 ### CONTROLLER
 The controller reads the allophones from the control bus and generates the necessary signals to drive the source and filter blocks. The parameters for the source and filter are encoded in a 4K ROM by means of high-level instructions.
