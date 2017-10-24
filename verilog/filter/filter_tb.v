@@ -10,9 +10,11 @@ module FILTER_TB;
     reg signed [15:0] sig_in;
     reg signed [9:0]  coef_in;
     reg        [3:0]  reg_sel;
+    
     wire signed [15:0] sig_out;
     wire done;
 
+    parameter load_simple = 1;
     defparam u_filter.DEBUG = 1;
 
     FILTER u_filter (
@@ -45,6 +47,42 @@ module FILTER_TB;
         rst_an = 1;
 
         // load all the coefficients
+    if (load_simple == 1)
+    begin
+        #10
+        coef_load = 1;
+        // section 1
+        coef_in     = 10'h3C9;
+        #10
+        coef_in     = 10'h1E4;
+        #10
+        // section 2
+        coef_in     = 10'h2B8;
+        #10
+        coef_in     = 10'h1CF;
+        #10
+        // section 3
+        coef_in     = 10'h238;
+        #10
+        coef_in     = 10'h080;
+        #10
+        // section 4
+        coef_in     = 10'h195;
+        #10
+        coef_in     = 10'h1BF;
+        #10
+        // section 5
+        coef_in     = 10'h135;
+        #10
+        coef_in     = 10'h1BF;
+        #10
+        // section 6
+        coef_in     = 10'h000;
+        #10
+        coef_in     = 10'h000;    
+    end
+    else
+    begin        
         #10
         coef_load = 1;
         // section 1
@@ -76,7 +114,8 @@ module FILTER_TB;
         coef_in     = 10'h000;
         #10
         coef_in     = 10'h000;
-        #10
+    end        
+        #10    
         coef_load = 0;
         start = 1;
         #10000;

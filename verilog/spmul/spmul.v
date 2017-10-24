@@ -33,10 +33,10 @@ module SPMUL (
     output reg done;
 
     //////////// internal signals //////////
-    reg signed [24:0] accumulator;
+    reg signed [24:0] accumulator;  
     reg signed [9:0]  coefreg;
     reg signed [15:0] sigreg;
-    reg [3:0]         state;    // state machine state
+    reg [3:0]         state;        // state machine state
     wire signed [15:0] bmul;
     
     reg domul,accu_clr;
@@ -53,7 +53,7 @@ module SPMUL (
                 // note: leave coefreg[9] untouched
                 // as this is the sign bit...
                 if (coefreg[8] == 1'b1)
-                    accumulator <= {accumulator[23:0], 1'b0} + sigreg;
+                    accumulator <= $signed({accumulator[23:0], 1'b0}) + sigreg;
                 else    
                     accumulator <= {accumulator[23:0], 1'b0};
                 
@@ -143,9 +143,9 @@ module SPMUL (
                         done <= 1;
                         // correct for the coeff sign bit
                         if (coefreg[9] == 0)
-                            result_out <= {1'b0, accumulator[23:9]};
+                            result_out <= accumulator[24:9];
                         else
-                            result_out <= {1'b1, ~accumulator[23:9]} + 1;
+                            result_out <= $signed(~accumulator[24:9]) + 1;
                         state <= 0;
                     end
                 default:
