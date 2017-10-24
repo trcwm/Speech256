@@ -6,7 +6,7 @@
 //
 
 module FILTER_TB;
-    reg clk, rst_an, start, coef_load, check_finish; 
+    reg clk, rst_an, start, coef_load, check_finish, clear_states; 
     reg signed [15:0] sig_in;
     reg signed [9:0]  coef_in;
     reg        [3:0]  reg_sel;
@@ -22,6 +22,7 @@ module FILTER_TB;
         .rst_an     (rst_an),
         .coef_in    (coef_in),
         .coef_load  (coef_load),
+        .clear_states (clear_states),
         .sig_in     (sig_in),
         .sig_out    (sig_out),
         .start      (start),
@@ -41,6 +42,7 @@ module FILTER_TB;
         coef_in     = 0;
         coef_load   = 0;
         start       = 0;
+        clear_states  = 0;
         check_finish  = 0;
 
         #10
@@ -52,29 +54,29 @@ module FILTER_TB;
         #10
         coef_load = 1;
         // section 1
-        coef_in     = 10'h3C9;
+        coef_in     = 10'h1C9;
         #10
-        coef_in     = 10'h1E4;
+        coef_in     = 10'h3E4;
         #10
         // section 2
-        coef_in     = 10'h2B8;
+        coef_in     = 10'h0B8;
         #10
-        coef_in     = 10'h1CF;
+        coef_in     = 10'h3CF;
         #10
         // section 3
-        coef_in     = 10'h238;
+        coef_in     = 10'h038;
         #10
-        coef_in     = 10'h080;
+        coef_in     = 10'h280;
         #10
         // section 4
-        coef_in     = 10'h195;
+        coef_in     = 10'h395;
         #10
-        coef_in     = 10'h1BF;
+        coef_in     = 10'h3BF;
         #10
         // section 5
-        coef_in     = 10'h135;
+        coef_in     = 10'h335;
         #10
-        coef_in     = 10'h1BF;
+        coef_in     = 10'h3BF;
         #10
         // section 6
         coef_in     = 10'h000;
@@ -118,7 +120,7 @@ module FILTER_TB;
         #10    
         coef_load = 0;
         start = 1;
-        #10000;
+        #20000;
         check_finish = 1;
     end
 

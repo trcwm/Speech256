@@ -20,7 +20,7 @@ module FILTER (
         // coefficient loading interface
         coef_in,        // 10 bit sign-magnitude coefficient
         coef_load,      // pulse '1' to load the coefficient into the internal register
-
+        clear_states,   // set to '1' to reset internal filter states
         // signal I/O and handshaking
         sig_in,         // 16-bit (scaled) source input signal
         sig_out,        // 16-bit filter output signal
@@ -39,6 +39,7 @@ module FILTER (
     input signed [15:0] sig_in;
     input signed [9:0]  coef_in;
     input start, coef_load;
+    input clear_states; // zero all states
 
 	//////////// FILTER OUTPUTS //////////
 	output wire signed [15:0] sig_out;
@@ -56,7 +57,7 @@ module FILTER (
     reg do_accu;                        // if 1, the accumulator is updated
     reg double_mode;                    // if 1, the input to the accumulator is x2
     reg update_states;                  // shift the state registers
-    reg clear_states;                   // zero all states
+    
     reg update_coeffs;                  // shift the coefficient registers
     reg [3:0] cur_state;                // current FSM state
     reg [3:0] next_state;               // next FSM state

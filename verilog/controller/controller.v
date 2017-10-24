@@ -16,6 +16,7 @@ module CONTROLLER (
         amp_out,    // amplitude output
         coeff_out,  // 8-bit coefficient data out
         coeff_stb,  // '1' when coeff_out holds new coefficient data
+        clear_states, // outputs '1' to reset filter states
         period_done_in // should be '1' when the source finished a period
     );
 
@@ -26,6 +27,7 @@ module CONTROLLER (
     input rst_an;
 
 	//////////// OUTPUTS //////////
+    output reg clear_states;
     output reg ldq;
     output reg coeff_stb;
     output reg signed [9:0] coeff_out;
@@ -165,13 +167,14 @@ module CONTROLLER (
             if (serve_pitch_data)
             begin
                 duration   <= dur_tmp;
-                amp_out    <= {4'b0000, amp_tmp[15:4]};
+                //amp_out    <= {4'b0000, amp_tmp[15:4]};
+                amp_out    <= {amp_tmp[13:0],2'b00};
                 period_out <= period_tmp;
             end
 
             if (set_ldq == 1)
                 ldq <= 1;
-            else if (reset_ldq == 1)
+            else if (data_stb == 1)
                 ldq <= 0;
 
             if ((period_done_in == 1) && (!serve_next_allo_data))
@@ -243,25 +246,29 @@ module CONTROLLER (
         dur_load    <= 0;
         allo_load   <= 0;
         load_cur_cmd <= 0;
-        set_ldq     <= 0;
-        reset_ldq   <= 0;
+        set_ldq      <= 0;
+        clear_states <= 0;
+
         serve_pitch_data <= 0;
         dur_cnt_clear <= 0;
 
         case (cur_state)
             S_IDLE:
                 begin
-                    set_ldq <= 1;
                     if (serve_next_allo_data == 1)
                     begin
-                        // we've run out of allophone data .. 
+                        // we've run out of allophone data ..
                     end
                     if (data_stb == 1)
                     begin
                         allo_load  <= 1;
+                        //reset_ldq  <= 1;
                         next_state <= S_JMPADDR1;
-                    end                    
-                    rom_addr_sel <= ROM_ADDR_ZERO;                    
+                    end
+                    else
+                        set_ldq <= 1;
+
+                    rom_addr_sel <= ROM_ADDR_ZERO;         
                 end
             S_JMPADDR1:
                 begin
@@ -285,7 +292,6 @@ module CONTROLLER (
                     // perform jmp                    
                     rom_addr_sel <= ROM_ADDR_JMP;
                     next_state <= S_CMDDECODE;
-                    reset_ldq <= 1;
                 end
             S_CMDDECODE:
                 begin
@@ -334,7 +340,16 @@ module CONTROLLER (
                     begin
                         serve_pitch_data <= 1;
                         dur_cnt_clear    <= 1;
-                        next_state <= (cur_cmd == 4'd2) ? S_LOADCOEF1 : S_CMDDECODE;
+                        if (cur_cmd == 4'd2)
+                        begin
+                            clear_states <= 1;
+                            next_state <= S_LOADCOEF1;
+                        end
+                        else
+                        begin
+                            next_state <= S_CMDDECODE;
+                        end
+                        
                     end
                 end                            
             S_LOADCOEF1:

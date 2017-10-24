@@ -7,12 +7,14 @@
 // 
 
 module SPEECH256_TOP (
-        clk,        // global Speech256 clock
+        clk,        // global Speech256 clock (256*10kHz)
         rst_an,     
         ldq,        // load request, is high when new allophone can be loaded
         data_in,    // allophone input
         data_stb,   // allophone strobe input
-        dac_out,    // 1-bit PWM DAC output
+        pwm_out,    // 1-bit PWM DAC output
+        sample_out,
+        sample_stb
     );
 
 	//////////// CLOCK //////////
@@ -22,8 +24,10 @@ module SPEECH256_TOP (
     input rst_an;
 
 	//////////// OUTPUTS //////////
-	output dac_out;
+	output pwm_out;
     output ldq;
+    output signed [15:0] sample_out;
+    output sample_stb;
 
 	//////////// INPUTS //////////
     input [5:0] data_in;
@@ -35,6 +39,7 @@ module SPEECH256_TOP (
     wire signed [15:0] sig_source;
     wire signed [15:0] sig_filter;
     wire period_done;
+    wire clear_states;
 
     wire [7:0]  period;
     wire [7:0]  dur;
@@ -60,6 +65,7 @@ module SPEECH256_TOP (
         .rst_an     (rst_an),
         .coef_in    (coef_bus),
         .coef_load  (coef_load),
+        .clear_states (clear_states),
         .sig_in     (sig_source),
         .sig_out    (sig_filter),
         .start      (pwmdac_ack),
@@ -71,7 +77,7 @@ module SPEECH256_TOP (
         .rst_an     (rst_an),
         .din        (sig_filter[15:8]),
         .din_ack    (pwmdac_ack),
-        .dacout     (dac_out)
+        .dacout     (pwm_out)
     );
 
     CONTROLLER u_controller (
@@ -84,8 +90,12 @@ module SPEECH256_TOP (
         .amp_out    (amp),
         .coeff_out  (coef_bus),
         .coeff_stb  (coef_load),
+        .clear_states (clear_states),
         .period_done_in (period_done)
     );
+
+    assign sample_out = sig_filter[15:0];
+    assign sample_stb = src_strobe;
 
     always @(posedge clk, negedge rst_an)
     begin

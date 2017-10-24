@@ -11,6 +11,7 @@ module CONTROLLER_TB;
     reg [5:0] data_in;
     reg data_stb, serve_next;
     reg period_done;
+    wire clear_states;
     
     wire ldq;
     wire [9:0] coeff;
@@ -29,6 +30,7 @@ module CONTROLLER_TB;
         .amp_out    (amp),
         .coeff_out  (coeff),
         .coeff_stb  (coeff_load),
+        .clear_states (clear_states),
         .period_done_in (period_done)
     );
 
