@@ -45,7 +45,7 @@ module CONTROLLER (
     reg  [11:0] rom_addr;
     reg  [11:0] last_rom_addr;
     reg  [2:0]  rom_addr_sel;
-    reg  rom_en;
+    wire  rom_en;
 
     reg  [3:0]  jmpmsb;
     reg  jmpmsb_load;
@@ -105,21 +105,21 @@ module CONTROLLER (
         .c10_out(coeff10bit)
     );
 
-    always @(posedge clk, negedge rst_an)
+    assign rom_en = 1;
+    
+    always @(posedge clk or negedge rst_an)
     begin
         if (rst_an == 0)
         begin
             // reset values
             amp_out    <= 0;
             period_out <= 8'd1;
-            rom_en     <= 1;
-            rom_addr   <= 0;
+            //rom_addr   <= 0;
             last_rom_addr <= 0;
             cur_state  <= 0;
             cur_allo   <= 0;
             cur_cmd    <= 0;
-            coeff_stb  <= 0;
-            coeff_out  <= 0;
+            //coeff_out  <= 0;
             coeff_cnt  <= 0;
             jmpmsb     <= 0;
             ldq        <= 0;

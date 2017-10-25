@@ -29,13 +29,12 @@ module SPMUL_TB;
         clk    = 0;
         rst_an = 0;
         sig    = 16'h7FFF;
-        //coef   = 10'h1FF;
         coef   = 10'h3FF; // sign-magnitude
-        start  = 0;
+        start  = 1;
         #3
         rst_an = 1;
-        #3
-        start  = 1;
+        #10
+        start  = 0;
         #1024;
     end
 
@@ -43,7 +42,11 @@ module SPMUL_TB;
         #5 clk = !clk;
 
     always @(posedge done)
-        if (done == 1)
+    begin
+        if ((done == 1) && (start == 0))
+        begin
+            $display("Expected: %d, got %d", -32703 , result);
             $finish;
-
+        end
+    end
 endmodule

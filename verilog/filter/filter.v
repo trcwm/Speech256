@@ -6,13 +6,6 @@
 // http://www.moseleyinstruments.com
 //
 
-//
-// MEH!, the FSM needs a rewrite
-// 
-// * split into clocked and unclocked ALWAYS
-//   and proper state names.
-//
-
 module FILTER (
         clk, 
         rst_an, 

@@ -75,7 +75,8 @@ module SPEECH256_TOP (
     PWMDAC u_pwmdac (
         .clk        (clk),
         .rst_an     (rst_an),
-        .din        (sig_filter[15:8]),
+        //.din        (sig_filter[15:8]),
+        .din        (sig_filter[11:4]), // add +24dB gain .. FIXME: add saturation ??
         .din_ack    (pwmdac_ack),
         .dacout     (pwm_out)
     );
