@@ -38,7 +38,6 @@ module CONTROLLER (
 	//////////// INPUTS //////////
     input [5:0] data_in;
     input       data_stb;
-    input       source_stb_in;
     input       period_done_in; // used for duration counting
 
     // internal counter and data registers
