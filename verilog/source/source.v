@@ -71,7 +71,7 @@ module SOURCE (
                     
                     // lfsr polynomial is X^17 + X^3 + 1
                     lfsr = {lfsr[15:0], lfsr[16] ^ lfsr[2]};
-                    source_out <= lfsr[0] ? {2'b00, amplitude[14:1]} : {2'b11, (~amplitude[14:1])};
+                    source_out <= lfsr[0] ? {1'b0, amplitude} : {1'b1, ~amplitude};
                 end
                 else
                 begin
