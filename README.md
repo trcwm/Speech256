@@ -9,6 +9,26 @@ An FPGA implementation of a classic 80ies speech synthesizer in Verilog.
 ## FPGA requirements
 * 4 K ROM
 
+Quartus II 13.1 synthesis results (Digilent DE0 board):
+```
+Flow Status	Successful - Thu Oct 26 16:47:44 2017
+Quartus II 64-Bit Version	13.1.0 Build 162 10/23/2013 SJ Web Edition
+Revision Name	Speech256_DE0
+Top-level Entity Name	Speech256_DE0
+Family	Cyclone III
+Device	EP3C16F484C6
+Timing Models	Final
+Total logic elements	657 / 15,408 ( 4 % )
+Total combinational functions	571 / 15,408 ( 4 % )
+Dedicated logic registers	484 / 15,408 ( 3 % )
+Total registers	484
+Total pins	21 / 347 ( 6 % )
+Total virtual pins	0
+Total memory bits	32,868 / 516,096 ( 6 % )
+Embedded Multiplier 9-bit elements	0 / 112 ( 0 % )
+Total PLLs	0 / 4 ( 0 % )
+```
+
 ## Description of blocks
 
 ### SPMUL
