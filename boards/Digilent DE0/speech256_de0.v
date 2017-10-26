@@ -5,7 +5,7 @@
 // http://www.moseleyinstruments.com
 //
 
-`define USE_SDDAC
+//`define USE_SDDAC
 
 module Speech256_DE0 (
     CLOCK_50,
@@ -27,7 +27,7 @@ module Speech256_DE0 (
     reg  [3:0] divcnt; // clock divider counter
     reg  [2:0] cur_state, next_state;
     
-    reg [2:0] rom_addr;
+    reg [3:0] rom_addr;
     reg [5:0] rom_data;
     reg inc_rom_addr;
 
@@ -94,7 +94,8 @@ module Speech256_DE0 (
         case(cur_state)
         S_IDLE:
             begin
-                if ((ldq == 1) && (BUTTON[0] == 1))
+                //if ((ldq == 1) && (BUTTON[0] == 1))
+                if (ldq == 1)
                 begin
                     inc_rom_addr <= 1;
                     next_state <= S_ALLOPHONE;
@@ -111,7 +112,6 @@ module Speech256_DE0 (
             begin
                 if (ldq == 0)
                 begin
-                    inc_rom_addr <= 1;
                     next_state <= S_IDLE;
                 end
             end
@@ -124,30 +124,30 @@ module Speech256_DE0 (
         // allophone ROM
         // hello, world
         case (rom_addr)
-            3'd0:   
+            4'd0:   
                 rom_data <= 6'h1B;
-            3'd1:   
+            4'd1:   
                 rom_data <= 6'h07;
-            3'd2:   
+            4'd2:   
                 rom_data <= 6'h2D;
-            3'd3:   
+            4'd3:   
                 rom_data <= 6'h35;
-            3'd4:   
+            4'd4:   
                 rom_data <= 6'h03;
-            3'd5:   
+            4'd5:   
                 rom_data <= 6'h2E;
-            3'd6:   
+            4'd6:   
                 rom_data <= 6'h1E;
-            3'd7:   
+            4'd7:   
                 rom_data <= 6'h33;
-            3'd8:   
+            4'd8:   
                 rom_data <= 6'h2D;
-            3'd9:   
+            4'd9:   
                 rom_data <= 6'h15;
-            3'd10:   
+            4'd10:   
                 rom_data <= 6'h03;
             default:   
-                rom_data <= 6'h00;
+                rom_data <= 6'h03;
         endcase
     end
 
