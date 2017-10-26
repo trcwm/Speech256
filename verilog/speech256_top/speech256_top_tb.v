@@ -31,6 +31,8 @@ module SPEECH256_TOP_TB;
 
     initial
     begin
+
+    `ifdef HELLOWORLD
         // hello, world
         allophones[0] = 6'h1B;
         allophones[1] = 6'h07;
@@ -44,7 +46,21 @@ module SPEECH256_TOP_TB;
         allophones[9] = 6'h15;
         allophones[10] = 6'h03;
         allophones[11] = 6'h00;
-
+    `else 
+        // E.T. phone
+        allophones[0] = 6'h13;
+        allophones[1] = 6'h02;
+        allophones[2] = 6'h0D;
+        allophones[3] = 6'h13;
+        allophones[4] = 6'h03;
+        allophones[5] = 6'h00;
+        allophones[6] = 6'h00;
+        allophones[7] = 6'h00;
+        allophones[8] = 6'h00;
+        allophones[9] = 6'h00;
+        allophones[10] = 6'h00;
+        allophones[11] = 6'h00;   
+    `endif
         fd = $fopen("dacout.sw","wb");
         $dumpfile ("speech256_top.vcd");
         $dumpvars;

@@ -166,8 +166,7 @@ module CONTROLLER (
             if (serve_pitch_data)
             begin
                 duration   <= dur_tmp;
-                //amp_out    <= {4'b0000, amp_tmp[15:4]};
-                amp_out    <= {amp_tmp[13:0],2'b00};
+                amp_out    <= amp_tmp;
                 period_out <= period_tmp;
             end
 

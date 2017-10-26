@@ -53,7 +53,9 @@ module SPEECH256_TOP (
     SOURCE u_source (
         .clk        (clk),
         .rst_an     (rst_an),
-        .period     (period),
+        //.period     ({period[6:0], 1'b0}),
+        //.period     ({1'b0,period[7:1]}),
+        .period     (period[7:0]),
         .amplitude  (amp[14:0]),
         .strobe     (src_strobe),
         .period_done (period_done),
@@ -87,7 +89,7 @@ module SPEECH256_TOP (
     PWMDAC u_pwmdac (
         .clk        (clk),
         .rst_an     (rst_an),
-        .din        (sig_filter[12:5]), // add +18dB gain .. FIXME: add saturation ??
+        .din        (sig_filter[10:3]), // add +30dB gain .. FIXME: add saturation ??
         .din_ack    (pwmdac_ack),
         .dacout     (pwm_out)
     );    

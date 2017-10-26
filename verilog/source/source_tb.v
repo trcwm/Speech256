@@ -21,7 +21,7 @@ module SOURCE_TB;
         .period  (period),
         .amplitude (amp),
         .strobe  (strobe),
-        .period_done (period_done)
+        .period_done (period_done),
         .source_out  (source_out)
     );
 

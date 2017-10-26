@@ -61,7 +61,7 @@ module SOURCE (
                     // ------------------------------------------------------------
                     //   LFSR NOISE GENERATOR
                     // ------------------------------------------------------------
-                    if (periodcnt == 64)                        
+                    if (periodcnt >= 64)                        
                     begin
                         periodcnt <= 0;
                         period_done <= 1;
@@ -70,7 +70,7 @@ module SOURCE (
                         periodcnt <= periodcnt + 1;
                     
                     // lfsr polynomial is X^17 + X^3 + 1
-                    lfsr = {lfsr[15:0], lfsr[16] ^ lfsr[2]};
+                    lfsr <= {lfsr[15:0], lfsr[16] ^ lfsr[2]};
                     source_out <= lfsr[0] ? {1'b0, amplitude} : {1'b1, ~amplitude};
                 end
                 else
@@ -79,7 +79,7 @@ module SOURCE (
                     //   PULSE GENERATOR
                     // ------------------------------------------------------------        
                     // make periodcnt count from 0 .. period-1
-                    if (periodcnt == period)
+                    if (periodcnt >= period)
                     begin
                         periodcnt <= 0;
                         period_done <= 1;
@@ -90,7 +90,12 @@ module SOURCE (
                     if (periodcnt < 8)
                         source_out <= {1'b0, amplitude};
                     else
-                        source_out <= 16'h0000;                            
+                        source_out <= 16'h0000;  
+
+                    // reset the noise generator when not in use, 
+                    // so it also works on FPGA's where there
+                    // is no reset :)
+                    lfsr <= 17'h1;   //note: never reset the LFSR to zero!                          
                 end
             end
             last_strobe <= strobe;

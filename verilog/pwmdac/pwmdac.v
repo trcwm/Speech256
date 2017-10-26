@@ -9,6 +9,8 @@
 // For a 10 kHz output rate, the clock rate should be 2.560 MHz
 // 
 
+//`define USE_PREFILTER
+
 module PWMDAC (
         clk, 
         rst_an, 
@@ -36,25 +38,25 @@ module PWMDAC (
 
     // pre-emphasis filter
     reg signed [7:0]   last_data;
-    reg signed [10:0]  sum1r_d;
-    reg signed [10:0]  sum1r;
     wire signed [10:0] sum1;
-    wire signed [13:0] sum2;
-    reg signed [7:0]  quantdata;
+
+    // 7- bit signed quantization input
+    // so we now have 20kHz carrier instead of 10kHz
+    // .. 
+    reg signed [6:0]  quantdata;
 
     assign sum1 = $signed({data[7] ,{data, 2'b00}}) + data   - $signed({last_data, 2'b00});
-    assign sum2 = $signed({sum1r[10],{sum1r, 2'b00}}) + sum1r - $signed({sum1r_d, 2'b00});
 
     // output saturation
     always @(*)
     begin        
-        if (sum2[13] ^ sum2[12] != 0)
+        if (sum1[10] ^ sum1[9] != 0)
         begin
             // saturation needed
-            quantdata = sum2[13] ?  8'h80 : 8'h7F;
+            quantdata = sum1[10] ?  8'h80 : 8'h7F;
         end
         else 
-            quantdata = sum2[12:5];
+            quantdata = sum1[9:3];
     end
 
     always @(posedge clk, negedge rst_an)
@@ -74,17 +76,27 @@ module PWMDAC (
 
             // compare counter with data 
             // and set output accordingly.
-            if (quantdata > counter)
-                dacout <= 1;
-            else
-                dacout <= 0;
+            //
+            // Note, we use 7 bits of the counter
+            // as a PWM waveform to get 2x 10 kHz carrier wave
+            // but the counter itself needs to be 8 bits
+            // so the sample rate is still 10ksps!
+            `ifdef USE_PREFILTER
+                if (quantdata > $signed(counter[6:0]))
+                    dacout <= 1;
+                else
+                    dacout <= 0;
+            `else
+                if ($signed(data[7:1]) > $signed(counter[6:0]))
+                    dacout <= 1;
+                else
+                    dacout <= 0;            
+            `endif
 
             // load new data into DAC when
             // counter is 127
             if (counter == 8'h7F)
             begin
-                sum1r   <= sum1;
-                sum1r_d <= sum1r;
                 last_data <= data;
                 data <= din;
                 din_ack <= 1;        
