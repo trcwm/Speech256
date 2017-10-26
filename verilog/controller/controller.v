@@ -89,13 +89,13 @@ module CONTROLLER (
         .en         (rom_en)
     );
 
-    parameter ROM_ADDR_ZERO = 3'b000,    // zero the ROM address 
+    localparam ROM_ADDR_ZERO = 3'b000,    // zero the ROM address 
               ROM_ADDR_INC  = 3'b001,    // increment the ROM address
               ROM_ADDR_JMP  = 3'b010,    // jump to code
               ROM_ADDR_ALLO = 3'b011,    // read allophone jump address
               ROM_ADDR_NOP  = 3'b100;
 
-    parameter COEFF_CNT_ZERO = 2'b00,   // zero coefficient counter
+    localparam COEFF_CNT_ZERO = 2'b00,   // zero coefficient counter
               COEFF_CNT_NOP  = 2'b01,   // do nothing
               COEFF_CNT_INC  = 2'b10;   // increment coefficient counter
 
@@ -192,7 +192,7 @@ module CONTROLLER (
 
     assign serve_next_allo_data = (dur_cnt == duration) ? 1 : 0;
 
-    parameter S_IDLE     = 4'd0,
+    localparam S_IDLE     = 4'd0,
               S_JMPADDR1 = 4'd1,
               S_JMPADDR2 = 4'd2,
               S_JMPADDR3 = 4'd3,             

@@ -20,6 +20,7 @@ module FILTER (
         start,          // trigger processing of the input signal
         done            // goes to '1' when sig_out has valid data
     );
+    
     parameter DEBUG = 0; //defult value
 
 	//////////// CLOCK //////////
@@ -179,7 +180,7 @@ module FILTER (
     end
 
     // FSM states
-    parameter S_IDLE     = 4'b0000,
+    localparam S_IDLE     = 4'b0000,
               S_DUMMY1   = 4'b0001,
               S_WAITMUL1 = 4'b0010,
               S_UPDATEC1 = 4'b0011,

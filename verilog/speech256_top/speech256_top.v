@@ -72,14 +72,23 @@ module SPEECH256_TOP (
         .done       (src_strobe)
     );
 
-    PWMDAC u_pwmdac (
+    `ifdef USE_SDDAC
+    SD2DAC u_sd2dac (
         .clk        (clk),
         .rst_an     (rst_an),
-        //.din        (sig_filter[15:8]),
-        .din        (sig_filter[11:4]), // add +24dB gain .. FIXME: add saturation ??
+        .din        ($signed({sig_filter[11:0],4'h0})), // add +24dB gain .. FIXME: add saturation ??
         .din_ack    (pwmdac_ack),
         .dacout     (pwm_out)
     );
+    `else
+    PWMDAC u_pwmdac (
+        .clk        (clk),
+        .rst_an     (rst_an),
+        .din        (sig_filter[11:4]), // add +24dB gain .. FIXME: add saturation ??
+        .din_ack    (pwmdac_ack),
+        .dacout     (pwm_out)
+    );    
+    `endif
 
     CONTROLLER u_controller (
         .clk        (clk),
