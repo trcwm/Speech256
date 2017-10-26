@@ -72,6 +72,9 @@ module SPEECH256_TOP (
         .done       (src_strobe)
     );
 
+    // Note: the sigma-delta DAC sounds bad because it needs
+    //       an interpolator/lowpass filter at the input.
+    //       
     `ifdef USE_SDDAC
     SD2DAC u_sd2dac (
         .clk        (clk),
@@ -84,7 +87,7 @@ module SPEECH256_TOP (
     PWMDAC u_pwmdac (
         .clk        (clk),
         .rst_an     (rst_an),
-        .din        (sig_filter[11:4]), // add +24dB gain .. FIXME: add saturation ??
+        .din        (sig_filter[12:5]), // add +18dB gain .. FIXME: add saturation ??
         .din_ack    (pwmdac_ack),
         .dacout     (pwm_out)
     );    
