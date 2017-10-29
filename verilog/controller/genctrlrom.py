@@ -67,11 +67,14 @@ cmd_list = [int(c,16) for c in hex_list];
 fout.write(VerilogHeader)
 
 # generate jump table
-for I in range(0,0x7E):
+for I in range(0,0x80):
+    print(cmd_list[I])
     emitRomByte(cmd_list[I])
 
-counter = 0x7E
+line = 0;
+counter = 0x80
 while (counter < len(cmd_list)):
+    line = line + 1;    
     cmd = cmd_list[counter];
     if (cmd == 0):        #  JUMP INSTRUCTION        
         print("?")
@@ -106,7 +109,7 @@ while (counter < len(cmd_list)):
     elif (cmd == 15):   # SET COEFFICIENTS: # END OF COMMAND / 15
         emitRomByte(cmd)
     else:
-        print("*** ERROR ***")
+        print("*** ERROR *** at line " + str(line))
         break
     counter = counter + 1
 
