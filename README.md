@@ -46,7 +46,7 @@ The second-order filter transfer function is H(z) = 1 / (1 - 2 * A1 * z^-1 - A2 
 The controller reads the allophones from the control bus and generates the necessary signals to drive the source and filter blocks. The parameters for the source and filter are encoded in a 4K ROM by means of high-level instructions.
 
 ## License
-TBD.
+GPLv3. Please see the LICENSE file.
 
 This project was done during the [Retro Challenge 2017/10 contest](http://www.retrochallenge.org).
 <br>
