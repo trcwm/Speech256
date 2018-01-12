@@ -190,7 +190,7 @@ module SPMUL (
                     next_state <= S_IDLE;
                 end
             default:
-                cur_state <= 0;
+                next_state <= S_IDLE;
         endcase
     end
 endmodule

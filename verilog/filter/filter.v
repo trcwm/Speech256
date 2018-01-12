@@ -70,7 +70,7 @@ module FILTER (
     reg [3:0] next_state;               // next FSM state
     
     reg clear_section, inc_section;
-    reg unsigned [2:0] section;         // current filter section being processed (0..5)
+    reg [2:0] section;                  // current filter section being processed (0..5)
 
     wire mul_done;
     wire signed [15:0] mul_result, accu_in, mul_in;
@@ -241,7 +241,7 @@ module FILTER (
                         begin
                             for(i=0; i<6; i=i+1)
                             begin
-                                $display("Section %d:   %d   %d", i, state1[i], state2[i]);
+                                //$display("Section %d:   %d   %d", i, state1[i], state2[i]);
                             end
                         end
                         

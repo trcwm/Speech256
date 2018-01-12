@@ -1,0 +1,1 @@
+This starterkit uses the XC3S500e-4fg320 FPGA.
