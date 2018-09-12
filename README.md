@@ -6,6 +6,8 @@ An FPGA implementation of a classic 80ies speech synthesizer in Verilog.
 
 * Platform agnostic implementation.
 
+[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/lbWPwb_cT0s/0.jpg)](http://www.youtube.com/watch?v=lbWPwb_cT0s)
+
 ## FPGA requirements
 * 4 K ROM
 
