@@ -8,6 +8,10 @@ An FPGA implementation of a classic 80ies speech synthesizer in Verilog.
 
 [![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/lbWPwb_cT0s/0.jpg)](http://www.youtube.com/watch?v=lbWPwb_cT0s)
 
+## Building
+
+In order to build the FPGA bit stream for the Digitent DE0 board, you need [Quartus II 13.1](http://fpgasoftware.intel.com/13.0sp1/). If you have a different FPGA board, use the tools provided with that board but be aware the project will need to be adapted.
+
 ## FPGA requirements
 * 4 K ROM
 
@@ -46,6 +50,9 @@ The second-order filter transfer function is H(z) = 1 / (1 - 2 * A1 * z^-1 - A2 
 
 ### CONTROLLER
 The controller reads the allophones from the control bus and generates the necessary signals to drive the source and filter blocks. The parameters for the source and filter are encoded in a 4K ROM by means of high-level instructions.
+
+## More technical stuff
+For more information on how this system works, see [http://www.cpcwiki.eu/index.php/SP0256#Technical](http://www.cpcwiki.eu/index.php/SP0256#Technical) and [http://spatula-city.org/~im14u2c/intv/tech/sp0256_instr_set.html](http://spatula-city.org/~im14u2c/intv/tech/sp0256_instr_set.html).
 
 ## License
 GPLv3. Please see the LICENSE file.
